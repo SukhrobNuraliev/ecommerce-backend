@@ -44,4 +44,15 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class);
+    }
+
+
+    public function hasFavorite($favorite_id): bool
+    {
+        return $this->favorites()->where('product_id', $favorite_id)->exists();
+    }
 }
