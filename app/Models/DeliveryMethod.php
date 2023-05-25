@@ -8,19 +8,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
 
-class Category extends Model
+class DeliveryMethod extends Model
 {
     use HasFactory, HasTranslations, SoftDeletes;
 
-    protected $fillable = ["name", "icon", "order"];
+    protected $fillable = [
+        'name',
+        'estimated_time',
+        'sum',
+    ];
 
-    public array $translatable = ["name"];
+    public array $translatable = ["name", "estimated_time"];
 
-
-
-
-    public function products(): HasMany
+    public function orders(): HasMany
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Order::class);
     }
 }
