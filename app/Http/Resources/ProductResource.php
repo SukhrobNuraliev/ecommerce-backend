@@ -18,7 +18,7 @@ class ProductResource extends JsonResource
             'inventory' => StockResource::collection($this->stocks),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-
+            'order_quantity' => $this->when(isset($this->quantity), $this->quantity),
         ];
     }
 }
