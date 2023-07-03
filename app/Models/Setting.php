@@ -4,19 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\Translatable\HasTranslations;
 
-class Value extends Model
+class Setting extends Model
 {
     use HasFactory, HasTranslations;
 
-    protected $fillable = ["name"];
+    protected $guarded = [];
 
     public array $translatable = ["name"];
 
-    public function valueable(): BelongsTo
+    public function values(): MorphMany
     {
-        return $this->morphTo();
+        return $this->morphMany(Value::class, 'valueable');
     }
 }

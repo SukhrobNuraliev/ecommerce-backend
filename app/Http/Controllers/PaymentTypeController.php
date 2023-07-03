@@ -38,13 +38,6 @@ class PaymentTypeController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PaymentType $paymentType)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
