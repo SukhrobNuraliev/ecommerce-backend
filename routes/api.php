@@ -26,6 +26,8 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('change-password', [AuthController::class, 'changePassword']);
 Route::get('user', [AuthController::class, 'user'])->middleware('auth:sanctum');
 
+Route::get('products/{product}/related', [ProductController::class, 'related']);
+
 Route::apiResources([
     'categories' => CategoryController::class,
     'categories.products' => CategoryProductController::class,
@@ -44,13 +46,3 @@ Route::apiResources([
     'payment-card-types' => PaymentCardTypeController::class,
     'user-payment-cards' => UserPaymentCardsController::class,
 ]);
-
-Route::get('test', function () {
-    $creditN = '12/34';
-
-    $enc = \Illuminate\Support\Facades\Crypt::encrypt($creditN);
-
-    $dec = \Illuminate\Support\Facades\Crypt::decrypt($enc);
-
-    dd($enc);
-});
