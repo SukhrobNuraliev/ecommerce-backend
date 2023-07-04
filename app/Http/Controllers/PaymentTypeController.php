@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 class PaymentTypeController extends Controller
 {
-    public function index(): Collection
+    public function index()
     {
-        return PaymentType::all();
+        return $this->response(PaymentType::all());
     }
 
     /**

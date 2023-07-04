@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('user_payment_cards', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('payment_card_type_id')->constrained()->cascadeOnDelete();
+            $table->text('name')->nullable();
+            $table->text('number');
+            $table->text('last_four_numbers');
+            $table->text('exp_date');
+            $table->text('holder_name');
             $table->timestamps();
         });
     }
