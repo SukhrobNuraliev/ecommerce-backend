@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryProductController;
 use App\Http\Controllers\DeliveryMethodController;
@@ -19,30 +18,23 @@ use App\Http\Controllers\UserPaymentCardsController;
 use App\Http\Controllers\UserSettingController;
 use Illuminate\Support\Facades\Route;
 
-
-Route::post('login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout']);
-Route::post('register', [AuthController::class, 'register']);
-Route::post('change-password', [AuthController::class, 'changePassword']);
-Route::get('user', [AuthController::class, 'user'])->middleware('auth:sanctum');
-
 Route::get('products/{product}/related', [ProductController::class, 'related']);
 
 Route::apiResources([
-    'categories' => CategoryController::class,
-    'categories.products' => CategoryProductController::class,
-    'statuses' => StatusController::class,
-    'statuses.orders' => StatusOrderController::class,
-    'favorites' => FavoriteController::class,
-    'products' => ProductController::class,
     'orders' => OrderController::class,
-    'delivery-methods' => DeliveryMethodController::class,
+    'reviews' => ReviewController::class,
+    'statuses' => StatusController::class,
+    'products' => ProductController::class,
+    'settings' => SettingController::class,
+    'favorites' => FavoriteController::class,
+    'categories' => CategoryController::class,
+    'user-settings' => UserSettingController::class,
     'payment-types' => PaymentTypeController::class,
     'user-addresses' => UserAddressController::class,
-    'reviews' => ReviewController::class,
+    'statuses.orders' => StatusOrderController::class,
     'products.reviews' => ProductReviewContoller::class,
-    'settings' => SettingController::class,
-    'user-settings' => UserSettingController::class,
+    'delivery-methods' => DeliveryMethodController::class,
     'payment-card-types' => PaymentCardTypeController::class,
+    'categories.products' => CategoryProductController::class,
     'user-payment-cards' => UserPaymentCardsController::class,
 ]);
