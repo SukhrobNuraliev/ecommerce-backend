@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\UserAddress;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 
 class OrderController extends Controller
@@ -17,6 +18,7 @@ class OrderController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum');
+        $this->authorizeResource(Order::class, 'order');
     }
 
 
@@ -31,6 +33,7 @@ class OrderController extends Controller
         return $this->response(OrderResource::collection(
             auth()->user()->orders()->paginate(10)
         ));
+
     }
 
 
@@ -120,6 +123,7 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
+        $order->delete();
+        return 1;
     }
 }
