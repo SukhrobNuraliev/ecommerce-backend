@@ -52,12 +52,16 @@ class OrderController extends Controller
                 $product->stocks()->find($requestProduct['stock_id']) &&
                 $product->stocks()->find($requestProduct['stock_id'])->quantity >= $requestProduct['quantity']
             ) {
+                /*
+                 * Shipping fee
+                 * Attribute price
+                 * */
 
                 $productWithStock = $product->withStock($requestProduct['stock_id']);
-                $productResource = new ProductResource($productWithStock);
+                $productResource = (new ProductResource($productWithStock))->resolve();
 
-                $sum += $productResource['price'];
-                $products[] = $productResource->resolve();
+                $sum += $productResource['discounted_price'] ?? $productResource['price'];
+                $products[] = $productResource;
 
             } else {
                 $requestProduct['we_have'] = $product->stocks()->find($requestProduct['stock_id'])->quantity;

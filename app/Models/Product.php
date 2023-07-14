@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Spatie\Translatable\HasTranslations;
 
 class Product extends Model
@@ -55,4 +56,23 @@ class Product extends Model
     {
         return $this->morphMany(Photo::class, 'photoable');
     }
+
+    public function discount()
+    {
+        return $this->hasOne(Discount::class);
+    }
+
+    public function getDiscount()
+    {
+        if ($this->discount) {
+            if ($this->discount->from === null && $this->discount->to === null) {
+                return $this->discount;
+            }
+            if (Carbon::now()->between(Carbon::parse($this->discount->from), Carbon::parse($this->discount->to))) {
+                return $this->discount;
+            }
+        }
+    }
+
+
 }
