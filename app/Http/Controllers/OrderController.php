@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\ProductResource;
+use App\Models\DeliveryMethod;
 use App\Models\Order;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
@@ -43,6 +44,7 @@ class OrderController extends Controller
         $products = [];
         $notFoundProducts = [];
         $address = UserAddress::find($request->address_id);
+        $deliveryMethod = DeliveryMethod::findOrFail($request->delivery_method_id);
 
         foreach ($request['products'] as $requestProduct) {
             $product = Product::with('stocks')->findOrFail($requestProduct['product_id']);
@@ -52,15 +54,13 @@ class OrderController extends Controller
                 $product->stocks()->find($requestProduct['stock_id']) &&
                 $product->stocks()->find($requestProduct['stock_id'])->quantity >= $requestProduct['quantity']
             ) {
-                /*
-                 * Shipping fee
-                 * Attribute price
-                 * */
 
                 $productWithStock = $product->withStock($requestProduct['stock_id']);
                 $productResource = (new ProductResource($productWithStock))->resolve();
 
+
                 $sum += $productResource['discounted_price'] ?? $productResource['price'];
+                $sum += $productWithStock->stocks[0]->added_price;
                 $products[] = $productResource;
 
             } else {
@@ -70,6 +70,8 @@ class OrderController extends Controller
         }
 
         if ($notFoundProducts === [] && $products !== [] && $sum !== 0) {
+
+            $sum += $deliveryMethod->sum;
 
             $order = auth()->user()->orders()->create([
                 'comment' => $request->comment,
@@ -97,7 +99,6 @@ class OrderController extends Controller
             );
         }
 
-//        return 'something went wrong, cant create order';
     }
 
 

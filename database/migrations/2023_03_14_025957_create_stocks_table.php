@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->json('attributes')->nullable();
             $table->integer('quantity')->default(1);
+            $table->unsignedBigInteger('added_price')->default(0)->nullable();
             $table->timestamps();
         });
     }

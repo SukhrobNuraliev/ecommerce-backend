@@ -36,13 +36,13 @@ class ValueSeeder extends Seeder
 
         $attribute = Attribute::find(2);
 
-         $attribute->values()->create([
+        $attribute->values()->create([
             "name" => [
                 "uz" => "MDF",
                 "ru" => "МДФ"
-            ]
+            ],
         ]);
-         $attribute->values()->create([
+        $attribute->values()->create([
             "name" => [
                 "uz" => "LDSP",
                 "ru" => "ЛДСП"
