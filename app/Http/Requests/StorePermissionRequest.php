@@ -2,16 +2,17 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreDiscountRequest extends FormRequest
+class StorePermissionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return auth()->user()->can('discount:create');
+        return auth()->user()->can('permission:create');
     }
 
     /**
@@ -20,12 +21,7 @@ class StoreDiscountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => 'required',
-            'name' => 'string|nullable',
-            'percent' => 'required_without:sum',
-            'sum' => 'required_without:percent',
-            'from' => 'nullable',
-            'to' => 'nullable',
+            "name" => "required"
         ];
     }
 }
