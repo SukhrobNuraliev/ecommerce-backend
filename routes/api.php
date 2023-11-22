@@ -30,6 +30,7 @@ Route::post('permissions/assign', [PermissionController::class, 'assign']);
 Route::post('roles/assign', [RoleController::class, 'assign']);
 
 
+
 Route::apiResources([
     'users' => UserController::class,
     'roles' => RoleController::class,
