@@ -35,6 +35,6 @@ class Controller extends BaseController
             'status' => 'error',
             'message' => $message ?? 'error occured',
             'data' => $data,
-        ]);
+        ], 400);
     }
 }
