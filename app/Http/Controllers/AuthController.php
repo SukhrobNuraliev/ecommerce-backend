@@ -6,14 +6,19 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
+use App\Services\AuthService;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
+    public function __construct(
+        protected AuthService $authService,
+        protected FileService $fileService,
+    ){}
+
     /**
      * @throws ValidationException
      */
@@ -21,11 +26,7 @@ class AuthController extends Controller
     {
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
-        }
+        $this->authService->checkCredentials($user, $request);
 
         return $this->success(
             '',
@@ -36,7 +37,9 @@ class AuthController extends Controller
 
     public function logout()
     {
+        auth()->user()->tokens()->delete();
 
+        return $this->success('user logged out',);
     }
 
 
@@ -47,13 +50,7 @@ class AuthController extends Controller
         $user = User::create($data);
         $user->assignRole('customer');
 
-        if ($request->hasFile('photo')){
-            $path = $request->file('photo')->store('users/'.$user->id, 'public');
-            $user->photos()->create([
-                'full_name' => $request->file('photo')->getClientOriginalName(),
-                'path' => $path,
-            ]);
-        }
+        $this->fileService->checkUserPhoto($request, $user);
 
         return $this->success(
             'user created',
@@ -71,4 +68,5 @@ class AuthController extends Controller
     {
         return $this->response(new UserResource($request->user()));
     }
+
 }

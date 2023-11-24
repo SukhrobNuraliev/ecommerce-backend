@@ -21,16 +21,16 @@ class PermissionController extends Controller
         return $this->response(Permission::all());
     }
 
+
     public function store(StorePermissionRequest $request)
     {
         if (Permission::query()->where('name', $request->name)->exists()) {
             return $this->error('persmission already exists');
         }
-
         $permission = Permission::create(['name' => $request->name, "guard_name" => "web"]);
-
         return $this->success('permission created', $permission);
     }
+
 
     public function assign(AssignPermissionToRoleRequest $request)
     {
@@ -42,7 +42,6 @@ class PermissionController extends Controller
         }
 
         $role->givePermissionTo($permission->name);
-
         return $this->success('permission assigned to role');
     }
 }
